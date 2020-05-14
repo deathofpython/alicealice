@@ -133,6 +133,7 @@ def get_city(req):
 def get_first_name(req):
     for entity in req['request']['nlu']['entities']:
         if entity['type'] == 'YANDEX.FIO':
+
             return entity['value'].get('first_name', None)
 
 
