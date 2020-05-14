@@ -9,9 +9,9 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 cities = {
-    'РјРѕСЃРєРІР°': ['213044/aab06daf0747133b7c43', '1030494/55c354c7d62ca8052fc1'],
-    'РЅСЊСЋ-Р№РѕСЂРє': ['965417/18f8c98f305f8e79f010', '965417/114b329b9690d80ba1fc'],
-    'РїР°СЂРёР¶': ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
+    'Москва': ['213044/aab06daf0747133b7c43', '1030494/55c354c7d62ca8052fc1'],
+    'Париж': ['965417/18f8c98f305f8e79f010', '965417/114b329b9690d80ba1fc'],
+    'Нью-Йорк': ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
 }
 
 sessionStorage = {}
@@ -35,7 +35,7 @@ def main():
 def handle_dialog(res, req):
     user_id = req['session']['user_id']
     if req['session']['new']:
-        res['response']['text'] = 'РџСЂРёРІРµС‚! РќР°Р·РѕРІРё СЃРІРѕС‘ РёРјСЏ!'
+        res['response']['text'] = 'Привет, меня зовут Алиса! Назови свое имя, смертный!'
         sessionStorage[user_id] = {
             'first_name': None,
             'game_started': False
@@ -45,43 +45,43 @@ def handle_dialog(res, req):
     if sessionStorage[user_id]['first_name'] is None:
         first_name = get_first_name(req)
         if first_name is None:
-            res['response']['text'] = 'РќРµ СЂР°СЃСЃР»С‹С€Р°Р»Р° РёРјСЏ. РџРѕРІС‚РѕСЂРё, РїРѕР¶Р°Р»СѓР№СЃС‚Р°!'
+            res['response']['text'] = 'Пока не скажешь имя ничего не узнаешь!'
         else:
             sessionStorage[user_id]['first_name'] = first_name
             sessionStorage[user_id]['guessed_cities'] = []
-            res['response']['text'] = f'РџСЂРёСЏС‚РЅРѕ РїРѕР·РЅР°РєРѕРјРёС‚СЊСЃСЏ, {first_name.title()}. РЇ РђР»РёСЃР°. РћС‚РіР°РґР°РµС€СЊ РіРѕСЂРѕРґ РїРѕ С„РѕС‚Рѕ?'
+            res['response']['text'] = f'Приветствую тебя, смертный {first_name.title()}! Отгадаешь загадки - получишь много чести!'
             res['response']['buttons'] = [
                 {
-                    'title': 'Р”Р°',
+                    'title': 'Начать игру',
                     'hide': True
                 },
                 {
-                    'title': 'РќРµС‚',
+                    'title': 'Отказаться',
                     'hide': True
                 }
             ]
     else:
         if not sessionStorage[user_id]['game_started']:
-            if 'РґР°' in req['request']['nlu']['tokens']:
+            if 'Начать игру' in req['request']['nlu']['tokens']:
                 if len(sessionStorage[user_id]['guessed_cities']) == 3:
-                    res['response']['text'] = 'РўС‹ РѕС‚РіР°РґР°Р» РІСЃРµ РіРѕСЂРѕРґР°!'
+                    res['response']['text'] = 'Ты выполнил задание с честью!'
                     res['end_session'] = True
                 else:
                     sessionStorage[user_id]['game_started'] = True
                     sessionStorage[user_id]['attempt'] = 1
                     play_game(res, req)
-            elif 'РЅРµС‚' in req['request']['nlu']['tokens']:
-                res['response']['text'] = 'РќСѓ Рё Р»Р°РґРЅРѕ!'
+            elif 'Отказаться' in req['request']['nlu']['tokens']:
+                res['response']['text'] = 'До встречи смертный!'
                 res['end_session'] = True
             else:
-                res['response']['text'] = 'РќРµ РїРѕРЅСЏР»Р° РѕС‚РІРµС‚Р°! РўР°Рє РґР° РёР»Рё РЅРµС‚?'
+                res['response']['text'] = 'Ты хочешь меня довести, да? Делай, как тебе велят, смертный!'
                 res['response']['buttons'] = [
                     {
-                        'title': 'Р”Р°',
+                        'title': 'Начать игру',
                         'hide': True
                     },
                     {
-                        'title': 'РќРµС‚',
+                        'title': 'Отказаться',
                         'hide': True
                     }
                 ]
