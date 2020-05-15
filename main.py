@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 cities = {
     ('москва', 'россия'): ['213044/aab06daf0747133b7c43', '1030494/55c354c7d62ca8052fc1'],
     ('париж', 'франция'): ['965417/18f8c98f305f8e79f010', '965417/114b329b9690d80ba1fc'],
-    ('нью-йорк', 'сша'): ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
+    ('нью-йорк', 'америка'): ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
 }
 
 sessionStorage = {}
@@ -32,7 +32,7 @@ def main():
     return json.dumps(response)
 
 
-def handle_dialog(res, req):
+def handle_dialog(res, req, *city):
     user_id = req['session']['user_id']
     if req['session']['new']:
         res['response']['text'] = 'Привет, меня зовут Алиса! Назови свое имя!'
@@ -74,6 +74,8 @@ def handle_dialog(res, req):
             elif req['request']['original_utterance'].lower() == 'отказаться':
                 res['response']['text'] = f'До встречи, {first_name.title()}!'
                 res['end_session'] = True
+            elif req['request']['original_utterance'].lower() == city[0][1]:
+                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             else:
                 res['response']['text'] = f'Какую команду ты хочешь мне дать, {first_name.title()}?'
                 res['response']['buttons'] = [
@@ -108,10 +110,7 @@ def play_game(res, req, id):
         city = sessionStorage[user_id]['city']
         if get_geo(req) == city[0]:
             res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
-            if get_geo(req) == city[1]:
-                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
-            else:
-                res['response']['text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в стране {city[1][0].upper() + city[1][1:]}. Сыграем еще, {first_name.title()}?'
+            handle_dialog(res, req, city)
             sessionStorage[user_id]['guessed_cities'].append(city)
             res['response']['buttons'] = [
                 {
