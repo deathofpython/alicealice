@@ -90,7 +90,7 @@ def handle_dialog(res, req):
                 ]
         elif sessionStorage[user_id]['current_city']:
             city = sessionStorage[user_id]['current_city']
-            if get_county(req) == city[1]:
+            if req['request']['original_utterance'].lower() == city[1]:
                 res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             else:
                 res['response'][
@@ -157,12 +157,6 @@ def get_city(req):
     for entity in req['request']['nlu']['entities']:
         if entity['type'] == 'YANDEX.GEO':
             return entity['value'].get('city', None)
-
-
-def get_county(req):
-    for entity in req['request']['nlu']['entities']:
-        if entity['type'] == 'YANDEX.GEO':
-            return entity['value'].get('country', None)
 
 
 def get_first_name(req):
