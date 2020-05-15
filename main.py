@@ -40,6 +40,7 @@ def handle_dialog(res, req):
             'first_name': None,
             'game_started': False
         }
+        sessionStorage[user_id]['current_city'] = None
         return
 
     if sessionStorage[user_id]['first_name'] is None:
@@ -67,7 +68,6 @@ def handle_dialog(res, req):
                 if len(sessionStorage[user_id]['guessed_cities']) == 3:
                     res['response']['text'] = f'Ты отгадал все города, {first_name.title()}!'
                     res['end_session'] = True
-                    sessionStorage[user_id]['city'] = None
                 else:
                     sessionStorage[user_id]['game_started'] = True
                     sessionStorage[user_id]['attempt'] = 1
@@ -88,8 +88,8 @@ def handle_dialog(res, req):
                         'hide': True
                     }
                 ]
-        elif sessionStorage[user_id]['city']:
-            city = sessionStorage[user_id]['city']
+        elif sessionStorage[user_id]['current_city']:
+            city = sessionStorage[user_id]['current_city']
             if get_geo(req) == city[1]:
                 res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             else:
@@ -125,6 +125,7 @@ def play_game(res, req, user_id):
         while city in sessionStorage[user_id]['guessed_cities']:
             city = random.choice(list(cities))
         sessionStorage[user_id]['city'] = city
+        sessionStorage[user_id]['current_city'] = city
         res['response']['card'] = {}
         res['response']['card']['type'] = 'BigImage'
         res['response']['card']['title'] = f'Назови город, {first_name.title()}!'
@@ -134,12 +135,14 @@ def play_game(res, req, user_id):
         city = sessionStorage[user_id]['city']
         if get_geo(req) == city[0]:
             res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
+            sessionStorage[user_id]['current_city'] = city
             return
         else:
             if attempt == 3:
                 res['response']['text'] = f'Это - {city[0].title()}. Сыграем еще, {first_name.title()}?'
                 sessionStorage[user_id]['game_started'] = False
                 sessionStorage[user_id]['guessed_cities'].append(city)
+                sessionStorage[user_id]['current_city'] = None
                 return
             else:
                 res['response']['card'] = {}
