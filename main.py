@@ -52,18 +52,18 @@ def handle_dialog(res, req):
             res['response']['text'] = f'Приветствую тебя, {first_name.title()}! Сыграем в игру \'Угадай город\'?'
             res['response']['buttons'] = [
                 {
-                    'title': 'Да',
+                    'title': 'Играть',
                     'hide': True
                 },
                 {
-                    'title': 'Нет',
+                    'title': 'Отказаться',
                     'hide': True
                 }
             ]
     else:
         first_name = sessionStorage[user_id]['first_name']
         if not sessionStorage[user_id]['game_started']:
-            if req['request']['original_utterance'].lower() == 'да':
+            if req['request']['original_utterance'].lower() == 'играть':
                 if len(sessionStorage[user_id]['guessed_cities']) == 3:
                     res['response']['text'] = f'Ты отгадал все города, {first_name.title()}!'
                     res['end_session'] = True
@@ -71,18 +71,18 @@ def handle_dialog(res, req):
                     sessionStorage[user_id]['game_started'] = True
                     sessionStorage[user_id]['attempt'] = 1
                     play_game(res, req, user_id)
-            elif req['request']['original_utterance'].lower() == 'нет':
+            elif req['request']['original_utterance'].lower() == 'отказаться':
                 res['response']['text'] = f'До встречи, {first_name.title()}!'
                 res['end_session'] = True
             else:
                 res['response']['text'] = f'Какую команду ты хочешь мне дать, {first_name.title()}?'
                 res['response']['buttons'] = [
                     {
-                        'title': 'Да',
+                        'title': 'Играть',
                         'hide': True
                     },
                     {
-                        'title': 'Нет',
+                        'title': 'Отказаться',
                         'hide': True
                     }
                 ]
