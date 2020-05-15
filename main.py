@@ -88,7 +88,7 @@ def handle_dialog(res, req, *city):
                     }
                 ]
         elif city:
-            if req['request']['original_utterance'].lower() == city[0][1]:
+            if get_geo(req) == city[0][1]:
                 return True
             else:
                 return False
