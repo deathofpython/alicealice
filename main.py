@@ -88,7 +88,7 @@ def handle_dialog(res, req, *city):
                     }
                 ]
         elif city:
-            ask_for_country(res, req, user_id, city)
+            ask_for_country(res, req, user_id, city[0])
         else:
             play_game(res, req, user_id)
 
