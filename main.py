@@ -103,6 +103,11 @@ def play_game(res, req, id):
         res['response']['card']['type'] = 'BigImage'
         res['response']['card']['title'] = f'Назови город, {first_name.title()}!'
         res['response']['card']['image_id'] = cities[city][attempt - 1]
+        res['response']['buttons'].append({
+                        'title': 'Покажи город на карте',
+                        'url': f'https://yandex.ru/maps/?mode=search&text={city}',
+                        'hide': True
+                    })
         res['response']['text'] = ''
     else:
         city = sessionStorage[user_id]['city']
@@ -122,6 +127,11 @@ def play_game(res, req, id):
                 res['response']['card']['type'] = 'BigImage'
                 res['response']['card']['title'] = f'Попробуй отгадать тот же город по другой фотографии, {first_name.title()}'
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
+                res['response']['buttons'].append({
+                    'title': 'Покажи город на карте',
+                    'url': f'https://yandex.ru/maps/?mode=search&text={city}',
+                    'hide': True
+                })
                 res['response']['text'] = ''
     sessionStorage[user_id]['attempt'] += 1
 
