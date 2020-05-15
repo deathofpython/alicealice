@@ -74,12 +74,7 @@ def handle_dialog(res, req, *city):
             elif req['request']['original_utterance'].lower() == 'отказаться':
                 res['response']['text'] = f'До встречи, {first_name.title()}!'
                 res['end_session'] = True
-            elif city:
-                if req['request']['original_utterance'].lower() == city[0][1]:
-                    res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
-                else:
-                    res['response'][
-                        'text'] = f'Город {city[0][0][0].upper() + city[0][0][1:]} находится в стране {city[0][1][0].upper() + city[0][1][1:]}. Сыграем еще, {first_name.title()}?'
+
             else:
                 res['response']['text'] = f'Какую команду ты хочешь мне дать, {first_name.title()}?'
                 res['response']['buttons'] = [
@@ -92,6 +87,12 @@ def handle_dialog(res, req, *city):
                         'hide': True
                     }
                 ]
+        elif city:
+            if req['request']['original_utterance'].lower() == city[0][1]:
+                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+            else:
+                res['response'][
+                    'text'] = f'Город {city[0][0][0].upper() + city[0][0][1:]} находится в стране {city[0][1][0].upper() + city[0][1][1:]}. Сыграем еще, {first_name.title()}?'
         else:
             play_game(res, req, user_id)
 
