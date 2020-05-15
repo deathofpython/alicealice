@@ -120,6 +120,7 @@ def play_game(res, req):
                 res['response']['card']['type'] = 'BigImage'
                 res['response']['card']['title'] = 'Назови город!'
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
+                res['response']['text'] = ''
     sessionStorage[user_id]['attempt'] += 1
 
 
