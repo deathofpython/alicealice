@@ -107,8 +107,8 @@ def play_game(res, req, id):
         res['response']['text'] = ''
     else:
         city = sessionStorage[user_id]['city']
-        if get_geo(req) == city:
-            res['response']['text'] = f'Правильно! А в какой стране {city}?'
+        if get_geo(req) == city[0]:
+            res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
             if req['request']['original_utterance'].lower() == city[0][1]:
                 res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             else:
