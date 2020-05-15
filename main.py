@@ -9,9 +9,9 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 cities = {
-    'москва': ['213044/aab06daf0747133b7c43', '1030494/55c354c7d62ca8052fc1'],
-    'париж': ['965417/18f8c98f305f8e79f010', '965417/114b329b9690d80ba1fc'],
-    'нью-йорк': ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
+    ('москва', 'россия'): ['213044/aab06daf0747133b7c43', '1030494/55c354c7d62ca8052fc1'],
+    ('париж', 'франция'): ['965417/18f8c98f305f8e79f010', '965417/114b329b9690d80ba1fc'],
+    ('нью-йорк', 'сша'): ["1540737/35f34e0c0ff4227f4d3b", '997614/cc126668ce5987b72b4e']
 }
 
 sessionStorage = {}
@@ -106,7 +106,7 @@ def play_game(res, req, id):
         res['response']['text'] = ''
     else:
         city = sessionStorage[user_id]['city']
-        if get_city(req) == city:
+        if get_city(req) == city[0]:
             res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             res['response']['buttons'] = [
@@ -120,7 +120,7 @@ def play_game(res, req, id):
                 },
                 {
                     'title': 'Покажи город на карте',
-                    'url': f'https://yandex.ru/maps/?mode=search&text={city}',
+                    'url': f'https://yandex.ru/maps/?mode=search&text={city[0]}',
                     'hide': True
                 }
             ]
@@ -128,7 +128,7 @@ def play_game(res, req, id):
             return
         else:
             if attempt == 3:
-                res['response']['text'] = f'Это - {city.title()}. Сыграем еще, {first_name.title()}?'
+                res['response']['text'] = f'Это - {city[0].title()}. Сыграем еще, {first_name.title()}?'
                 sessionStorage[user_id]['game_started'] = False
                 sessionStorage[user_id]['guessed_cities'].append(city)
                 return
