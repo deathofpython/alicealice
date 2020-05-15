@@ -61,7 +61,7 @@ def handle_dialog(res, req):
                 }
             ]
     else:
-        first_name = get_first_name(req)
+        first_name = sessionStorage[user_id]['first_name']
         if not sessionStorage[user_id]['game_started']:
             if req['request']['original_utterance'].lower() == 'да':
                 if len(sessionStorage[user_id]['guessed_cities']) == 3:
@@ -87,11 +87,11 @@ def handle_dialog(res, req):
                     }
                 ]
         else:
-            play_game(res, req)
+            play_game(res, req, user_id)
 
 
-def play_game(res, req):
-    first_name = get_first_name(req)
+def play_game(res, req, id):
+    first_name = sessionStorage[id]['first_name']
     user_id = req['session']['user_id']
     attempt = sessionStorage[user_id]['attempt']
     if attempt == 1:
