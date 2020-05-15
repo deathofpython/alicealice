@@ -101,6 +101,7 @@ def play_game(res, req):
         res['response']['card']['type'] = 'BigImage'
         res['response']['card']['title'] = 'Назови город!'
         res['response']['card']['image_id'] = cities[city][attempt - 1]
+        res['response']['text'] = ''
     else:
         city = sessionStorage[user_id]['city']
         if get_city(req) == city:
@@ -117,7 +118,7 @@ def play_game(res, req):
             else:
                 res['response']['card'] = {}
                 res['response']['card']['type'] = 'BigImage'
-                res['response']['card']['title'] = 'Попробуй отгадать этот же город по другой фотографии!'
+                res['response']['card']['title'] = 'Назови город!'
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
     sessionStorage[user_id]['attempt'] += 1
 
