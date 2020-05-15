@@ -87,12 +87,6 @@ def handle_dialog(res, req, *city):
                         'hide': True
                     }
                 ]
-        elif city:
-            if req['request']['original_utterance'].lower() == city[0][1]:
-                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
-            else:
-                res['response'][
-                    'text'] = f'Город {city[0][0][0].upper() + city[0][0][1:]} находится в стране {city[0][1][0].upper() + city[0][1][1:]}. Сыграем еще, {first_name.title()}?'
         else:
             play_game(res, req, user_id)
 
@@ -115,7 +109,11 @@ def play_game(res, req, id):
         city = sessionStorage[user_id]['city']
         if get_geo(req) == city[0]:
             res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
-            handle_dialog(res, req, city)
+            if req['request']['original_utterance'].lower() == city[0][1]:
+                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+            else:
+                res['response'][
+                    'text'] = f'Город {city[0][0][0].upper() + city[0][0][1:]} находится в стране {city[0][1][0].upper() + city[0][1][1:]}. Сыграем еще, {first_name.title()}?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             res['response']['buttons'] = [
                 {
