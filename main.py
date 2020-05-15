@@ -134,7 +134,7 @@ def play_game(res, req, user_id):
     else:
         city = sessionStorage[user_id]['city']
         if get_city(req) == city[0]:
-            res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
+            res['response']['text'] = f'Правильно! А в какой стране {city[0][0].upper() + city[0][1:]}?'
             sessionStorage[user_id]['current_city'] = city
             return
         else:
