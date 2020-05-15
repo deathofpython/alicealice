@@ -108,6 +108,28 @@ def play_game(res, req, id):
         city = sessionStorage[user_id]['city']
         if get_geo(req) == city[0]:
             res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
+            if get_geo(req) == city[1]:
+                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+            else:
+                res['response']['text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в {city[1][0].upper() + city[1][1:]} Сыграем еще, {first_name.title()}?'
+            sessionStorage[user_id]['guessed_cities'].append(city)
+            res['response']['buttons'] = [
+                {
+                    'title': 'Играть',
+                    'hide': True
+                },
+                {
+                    'title': 'Отказаться',
+                    'hide': True
+                },
+                {
+                    'title': 'Покажи город на карте',
+                    'url': f'https://yandex.ru/maps/?mode=search&text={city[0]}',
+                    'hide': True
+                }
+            ]
+            sessionStorage[user_id]['game_started'] = False
+            return
         else:
             if attempt == 3:
                 res['response']['text'] = f'Это - {city[0].title()}. Сыграем еще, {first_name.title()}?'
@@ -120,28 +142,6 @@ def play_game(res, req, id):
                 res['response']['card']['title'] = f'Попробуй отгадать тот же город по другой фотографии, {first_name.title()}'
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
                 res['response']['text'] = ''
-        if get_geo(req) == city[1]:
-            res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
-        else:
-            res['response']['text'] = f'{city[0]} находится в {city[1]} Сыграем еще, {first_name.title()}?'
-        sessionStorage[user_id]['guessed_cities'].append(city)
-        res['response']['buttons'] = [
-            {
-                'title': 'Играть',
-                'hide': True
-            },
-            {
-                'title': 'Отказаться',
-                'hide': True
-            },
-            {
-                'title': 'Покажи город на карте',
-                'url': f'https://yandex.ru/maps/?mode=search&text={city[0]}',
-                'hide': True
-            }
-        ]
-        sessionStorage[user_id]['game_started'] = False
-        return
     sessionStorage[user_id]['attempt'] += 1
 
 
