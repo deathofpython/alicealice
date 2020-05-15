@@ -70,7 +70,7 @@ def handle_dialog(res, req):
                 else:
                     sessionStorage[user_id]['game_started'] = True
                     sessionStorage[user_id]['attempt'] = 1
-                    play_game(res, req)
+                    play_game(res, req, user_id)
             elif req['request']['original_utterance'].lower() == 'нет':
                 res['response']['text'] = f'До встречи, {first_name.title()}!'
                 res['end_session'] = True
