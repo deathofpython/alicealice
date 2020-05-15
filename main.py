@@ -40,6 +40,7 @@ def handle_dialog(res, req):
             'first_name': None,
             'game_started': False
         }
+        sessionStorage[user_id]['current_city'] = None
         return
 
     if sessionStorage[user_id]['first_name'] is None:
