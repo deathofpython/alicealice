@@ -106,8 +106,12 @@ def play_game(res, req, id):
         res['response']['text'] = ''
     else:
         city = sessionStorage[user_id]['city']
-        if get_city(req) == city[0]:
-            res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+        if get_geo(req) == city[0]:
+            res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
+            if get_geo(req) == city[1]:
+                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+            else:
+                res['response']['text'] = f'{city[0]} находится в {city[1]} Сыграем еще, {first_name.title()}?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             res['response']['buttons'] = [
                 {
@@ -141,7 +145,7 @@ def play_game(res, req, id):
     sessionStorage[user_id]['attempt'] += 1
 
 
-def get_city(req):
+def get_geo(req):
     for entity in req['request']['nlu']['entities']:
         if entity['type'] == 'YANDEX.GEO':
             return entity['value'].get('city', None)
