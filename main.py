@@ -103,7 +103,7 @@ def play_game(res, req):
         res['response']['card']['image_id'] = cities[city][attempt - 1]
     else:
         city = sessionStorage[user_id]['city']
-        if get_city(req).lower() == city:
+        if get_city(req) == city:
             res['response']['text'] = 'Правильно! Сыграем еще?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             sessionStorage[user_id]['game_started'] = False
