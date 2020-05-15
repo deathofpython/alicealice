@@ -88,16 +88,13 @@ def handle_dialog(res, req, *city):
                     }
                 ]
         elif city:
-            if get_geo(req) == city[0][1]:
-                return True
-            else:
-                return False
+            ask_for_country(res, req, user_id, city)
         else:
             play_game(res, req, user_id)
 
 
-def play_game(res, req, id):
-    first_name = sessionStorage[id]['first_name']
+def play_game(res, req, user_id):
+    first_name = sessionStorage[user_id]['first_name']
     user_id = req['session']['user_id']
     attempt = sessionStorage[user_id]['attempt']
     if attempt == 1:
@@ -114,28 +111,7 @@ def play_game(res, req, id):
         city = sessionStorage[user_id]['city']
         if get_geo(req) == city[0]:
             res['response']['text'] = f'Правильно! А в какой стране {city[0]}?'
-            if handle_dialog(res, req, city):
-                res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
-            else:
-                res['response'][
-                    'text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в стране {city[1][0].upper() + city[1][1:]}. Сыграем еще, {first_name.title()}?'
-            sessionStorage[user_id]['guessed_cities'].append(city)
-            res['response']['buttons'] = [
-                {
-                    'title': 'Играть',
-                    'hide': True
-                },
-                {
-                    'title': 'Отказаться',
-                    'hide': True
-                },
-                {
-                    'title': 'Покажи город на карте',
-                    'url': f'https://yandex.ru/maps/?mode=search&text={city[0]}',
-                    'hide': True
-                }
-            ]
-            sessionStorage[user_id]['game_started'] = False
+            handle_dialog(res, req, city)
             return
         else:
             if attempt == 3:
@@ -150,6 +126,32 @@ def play_game(res, req, id):
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
                 res['response']['text'] = ''
     sessionStorage[user_id]['attempt'] += 1
+
+
+def ask_for_country(res, req, user_id, city):
+    first_name = sessionStorage[user_id]['first_name']
+    if get_geo(req) == city[1]:
+        res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
+    else:
+        res['response'][
+            'text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в стране {city[1][0].upper() + city[1][1:]}. Сыграем еще, {first_name.title()}?'
+    sessionStorage[user_id]['guessed_cities'].append(city)
+    res['response']['buttons'] = [
+        {
+            'title': 'Играть',
+            'hide': True
+        },
+        {
+            'title': 'Отказаться',
+            'hide': True
+        },
+        {
+            'title': 'Покажи город на карте',
+            'url': f'https://yandex.ru/maps/?mode=search&text={city[0]}',
+            'hide': True
+        }
+    ]
+    sessionStorage[user_id]['game_started'] = False
 
 
 def get_geo(req):
