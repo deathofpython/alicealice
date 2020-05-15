@@ -111,7 +111,7 @@ def play_game(res, req, id):
             if get_geo(req) == city[1]:
                 res['response']['text'] = f'Правильно! Сыграем еще, {first_name.title()}?'
             else:
-                res['response']['text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в {city[1][0].upper() + city[1][1:]} Сыграем еще, {first_name.title()}?'
+                res['response']['text'] = f'Город {city[0][0].upper() + city[0][1:]} находится в стране {city[1][0].upper() + city[1][1:]}. Сыграем еще, {first_name.title()}?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             res['response']['buttons'] = [
                 {
