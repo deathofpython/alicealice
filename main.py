@@ -62,15 +62,15 @@ def handle_dialog(res, req):
             ]
     else:
         if not sessionStorage[user_id]['game_started']:
-            if 'Начать игру' in req['request']['nlu']['tokens']:
+            if req['request']['original_utterance'].lower() == 'начать игру':
                 if len(sessionStorage[user_id]['guessed_cities']) == 3:
-                    res['response']['text'] = 'РўС‹ РѕС‚РіР°РґР°Р» РІСЃРµ РіРѕСЂРѕРґР°!'
+                    res['response']['text'] = 'Ты выполнил все задания, смертный! Не жди от меня вознаграждения!'
                     res['end_session'] = True
                 else:
                     sessionStorage[user_id]['game_started'] = True
                     sessionStorage[user_id]['attempt'] = 1
                     play_game(res, req)
-            elif 'Отказаться' in req['request']['nlu']['tokens']:
+            elif req['request']['original_utterance'].lower() == 'отказаться':
                 res['response']['text'] = 'До встречи смертный!'
                 res['end_session'] = True
             else:
