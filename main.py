@@ -112,6 +112,7 @@ def handle_dialog(res, req):
                 }
             ]
             sessionStorage[user_id]['game_started'] = False
+            sessionStorage[user_id]['current_city'] = None
         else:
             play_game(res, req, user_id)
 
@@ -125,7 +126,6 @@ def play_game(res, req, user_id):
         while city in sessionStorage[user_id]['guessed_cities']:
             city = random.choice(list(cities))
         sessionStorage[user_id]['city'] = city
-        sessionStorage[user_id]['current_city'] = city
         res['response']['card'] = {}
         res['response']['card']['type'] = 'BigImage'
         res['response']['card']['title'] = f'Назови город, {first_name.title()}!'
