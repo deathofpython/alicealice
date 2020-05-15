@@ -75,16 +75,6 @@ def handle_dialog(res, req):
                 res['end_session'] = True
             else:
                 res['response']['text'] = 'Ты хочешь меня довести, да? Делай, как тебе велят, смертный!'
-                res['response']['buttons'] = [
-                    {
-                        'title': 'Начать игру',
-                        'hide': True
-                    },
-                    {
-                        'title': 'Отказаться',
-                        'hide': True
-                    }
-                ]
         else:
             play_game(res, req)
 
@@ -101,11 +91,11 @@ def play_game(res, req):
         res['response']['card']['type'] = 'BigImage'
         res['response']['card']['title'] = 'Назови город, смертный!'
         res['response']['card']['image_id'] = cities[city][attempt - 1]
-        res['response']['text'] = 'РўРѕРіРґР° СЃС‹РіСЂР°РµРј!'
+        res['response']['text'] = 'aaaaa'
     else:
         city = sessionStorage[user_id]['city']
         if get_city(req) == city:
-            res['response']['text'] = 'РџСЂР°РІРёР»СЊРЅРѕ! РЎС‹РіСЂР°РµРј РµС‰С‘?'
+            res['response']['text'] = 'Правильно! Сыграем еще?'
             sessionStorage[user_id]['guessed_cities'].append(city)
             sessionStorage[user_id]['game_started'] = False
             return
